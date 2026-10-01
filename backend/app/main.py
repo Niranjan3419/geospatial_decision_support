@@ -4,11 +4,17 @@ Handles hazard analysis, MCDM-based risk assessment, and emergency routing.
 """
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pathlib import Path
 import numpy as np
 from typing import Dict, List, Optional, Tuple
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+FRONTEND_DIR = BASE_DIR / "frontend"
+TEMPLATES_DIR = FRONTEND_DIR / "templates"
+STATIC_DIR = FRONTEND_DIR / "static"
 
 try:
     from app.services.hazard_processor import HazardProcessor
@@ -26,6 +32,9 @@ app = FastAPI(
     description="Multi-hazard risk assessment and emergency routing",
     version="1.0.0"
 )
+
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+app.mount("/templates", StaticFiles(directory=str(TEMPLATES_DIR)), name="templates")
 
 # Add CORS middleware
 app.add_middleware(
@@ -86,11 +95,8 @@ class RouteResponse(BaseModel):
 # Endpoints
 @app.get("/")
 async def root():
-    """Root endpoint."""
-    return {
-        "message": "Geospatial Decision Support System API",
-        "status": "running"
-    }
+    """Serve the dashboard in deployed environments and local single-service runs."""
+    return FileResponse(TEMPLATES_DIR / "index.html")
 
 
 @app.get("/status")
