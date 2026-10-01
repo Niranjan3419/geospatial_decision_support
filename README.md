@@ -107,6 +107,19 @@ geospatial_decision_support/
 ### Frontend Setup
 
 1. **Navigate to frontend directory:**
+
+## Vercel Deployment
+
+This repository includes a Vercel configuration to deploy the FastAPI backend as a serverless ASGI app.
+
+1. In the Vercel dashboard, import this repository.
+2. Ensure the project uses the Python runtime and the default build will install from `requirements.txt` at the repo root.
+3. Vercel will run the `api/index.py` serverless entry which imports the existing backend app (no route duplication).
+
+Notes:
+- The serverless entry adds the `backend/` folder to `sys.path` so existing `app` package imports work.
+- Geospatial native libraries (Shapely, GeoPandas, Rasterio) may not be available in Vercel's serverless environment. Hazard processing endpoints will return a clear JSON error if native libs are unavailable.
+
    ```bash
    cd frontend
    ```
