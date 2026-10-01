@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geospatial Decision Support System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Geospatial Decision Support System</h1>
+            <p>Multi-Hazard Risk Assessment & Emergency Routing</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="panel">
+                    <h2>System Status</h2>
+                    <div id="status" class="status-box">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>Hazard Layers</h2>
+                    <div id="hazard-layers" class="hazard-list">
+                        <p>No hazards loaded</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>MCDM Weights</h2>
+                    <form id="weights-form">
+                        <div class="form-group">
+                            <label>Flood Risk: <span id="flood-value">0.35</span></label>
+                            <input type="range" min="0" max="1" step="0.01" id="flood" value="0.35">
+                        </div>
+                        <div class="form-group">
+                            <label>Landslide Risk: <span id="landslide-value">0.35</span></label>
+                            <input type="range" min="0" max="1" step="0.01" id="landslide" value="0.35">
+                        </div>
+                        <div class="form-group">
+                            <label>Slope: <span id="slope-value">0.20</span></label>
+                            <input type="range" min="0" max="1" step="0.01" id="slope" value="0.20">
+                        </div>
+                        <div class="form-group">
+                            <label>Settlement Proximity: <span id="settlement-value">0.10</span></label>
+                            <input type="range" min="0" max="1" step="0.01" id="settlement" value="0.10">
+                        </div>
+                        <p class="sum-warning" id="sum-warning"></p>
+                        <button type="button" class="btn btn-primary" onclick="calculateRisk()">Calculate Risk Index</button>
+                    </form>
+                </div>
+
+                <div class="panel">
+                    <h2>Risk Analysis</h2>
+                    <button class="btn btn-secondary" onclick="identifyHighRisk()">Identify High-Risk Areas</button>
+                    <div id="risk-stats" class="stats-box"></div>
+                </div>
+
+                <div class="panel">
+                    <h2>Emergency Route</h2>
+                    <div class="form-group">
+                        <label>Start Point (row,col)</label>
+                        <input type="text" id="start-point" placeholder="e.g., 100,100">
+                    </div>
+                    <div class="form-group">
+                        <label>End Point (row,col)</label>
+                        <input type="text" id="end-point" placeholder="e.g., 200,200">
+                    </div>
+                    <button class="btn btn-success" onclick="findRoute()">Find Route</button>
+                    <button class="btn btn-info" onclick="findAlternatives()">Find Alternatives</button>
+                    <div id="route-info" class="route-box"></div>
+                </div>
+            </aside>
+
+            <!-- Map -->
+            <main class="map-container">
+                <div id="map"></div>
+                <div class="legend">
+                    <h3>Legend</h3>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: linear-gradient(to right, blue, cyan, green, yellow, red);"></div>
+                        <span>Risk Level (Low → High)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="color: green;">● Selected Route</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="color: red;">● Start Point</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="color: blue;">● End Point</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="static/app.js"></script>
+</body>
+</html>
