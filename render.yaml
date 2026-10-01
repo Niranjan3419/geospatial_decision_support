@@ -3,6 +3,7 @@ services:
     name: geospatial-decision-support
     runtime: python
     plan: free
+    pythonVersion: "3.11"
     buildCommand: |
       cd backend
       pip install --upgrade pip
